@@ -3,8 +3,8 @@ extends Node2D
 # screen values
 @onready var screenWidth = get_tree().get_root().size.x
 @onready var screenHeight = get_tree().get_root().size.y
-@onready var halfScreenWidth = screenWidth/2
-@onready var halfScreenHeight = screenHeight/2
+@onready var halfScreenWidth = screenWidth/2.0
+@onready var halfScreenHeight = screenHeight/2.0
 
 # ball variables
 var ballRadius = 10.0
@@ -30,24 +30,24 @@ var stringValue = "Hello World!"
 
 # player paddle
 @onready var playerPosition = Vector2(paddlePadding, halfScreenHeight - halfPaddleHeight)
-@onready var playerStartPosition = Rect2(playerPosition, paddleSize)
+@onready var playerRectangle = Rect2(playerPosition, paddleSize)
 
 # ai paddle
 @onready var aiPosition = Vector2(screenWidth - (paddlePadding + paddleSize.x), halfScreenHeight - halfPaddleHeight)
-@onready var aiStartPosition = Rect2(aiPosition, paddleSize)
+@onready var aiRectangle = Rect2(aiPosition, paddleSize)
 
 # string variable
 var stringPosition
 
 func _ready() -> void:
-	print(get_tree().get_root().size)
+	#print(get_tree().get_root().size)
 	font.font_data = robotoFile
 	font.fixed_size = fontSize
 	halfWidthFont = font.get_string_size(stringValue).x/2
 	heightFont = font.get_height()
 	stringPosition = Vector2(halfScreenWidth - halfWidthFont, heightFont)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	pass
 
 func _draw() -> void:
@@ -55,6 +55,6 @@ func _draw() -> void:
 
 func setStartingPosition():
 	draw_circle(ballPosition, ballRadius, ballColor)
-	draw_rect(playerStartPosition, paddleColor)
-	draw_rect(aiStartPosition, paddleColor)
+	draw_rect(playerRectangle, paddleColor)
+	draw_rect(aiRectangle, paddleColor)
 	draw_string(font, stringPosition, stringValue)
