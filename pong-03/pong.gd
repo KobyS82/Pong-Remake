@@ -108,7 +108,19 @@ func _physics_process(delta: float) -> void:
 				currentGameState = GAME_STATE.SERVE
 				deltaKeyPress = RESET_DELTA_KEY
 				isPlayerServe = false
+				
+			if(ballPosition.x - ballRadius >= playerPosition.x and
+			ballPosition.x - ballRadius <= playerPosition.x + paddleSize.x and 
+			ballPosition.y >= playerPosition.y and 
+			ballPosition.y <= playerPosition.y + paddleSize.y):
+				ballSpeed = -ballSpeed
 			
+			if(ballPosition.x + ballRadius >= aiPosition.x and
+			ballPosition.x + ballRadius <= aiPosition.x + paddleSize.x and 
+			ballPosition.y >= aiPosition.y and 
+			ballPosition.y <= aiPosition.y + paddleSize.y):
+				ballSpeed = -ballSpeed
+				
 			queue_redraw()
 
 func _draw() -> void:
