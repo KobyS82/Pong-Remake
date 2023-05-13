@@ -118,11 +118,11 @@ func _physics_process(delta: float) -> void:
 			
 			if isPlayerServe:
 				ballSpeed = startingSpeed
-				changeString("Player Serve")
+				changeString("Player Serve: Press spacebar so serve")
 				
 			if !isPlayerServe:
 				ballSpeed = -startingSpeed
-				changeString("Ai Serve")
+				changeString("Ai Serve: Press spacebar so serve")
 			
 			if(Input.is_key_pressed(KEY_SPACE)and 
 			deltaKeyPress > MAX_KEY_TIME):
@@ -199,7 +199,10 @@ func _physics_process(delta: float) -> void:
 				playerPosition.y = clamp(playerPosition.y, 0.0, screenHeight - paddleSize.y)
 				playerRectangle = Rect2(playerPosition, paddleSize)
 				
-			aiPosition.y = ballPosition.y - paddleSize.y/2
+			if ballPosition.y > aiPosition.y + (paddleSize.y/2 + 10):
+				aiPosition.y += 250 * delta
+			if ballPosition.y < aiPosition.y + (paddleSize.y/2 - 10):
+				aiPosition.y -= 250 * delta
 			aiPosition.y = clamp(aiPosition.y, 0.0, screenHeight - paddleSize.y)
 			aiRectangle = Rect2(aiPosition, paddleSize)
 				
