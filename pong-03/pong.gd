@@ -58,6 +58,17 @@ var ballSpeed = -startingSpeed
 
 var playerSpeed = 200.0
 
+# scoring
+var playerScore = 0
+var playerScoreText = str(playerScore)
+var playerTextHalfWidth
+var playerScorePosition
+
+var aiScore = 0
+var aiScoreText = str(aiScore)
+var aiTextHalfWidth
+var aiScorePosition
+
 func _ready() -> void:
 	#print(get_tree().get_root().size)
 	font.font_data = robotoFile
@@ -65,6 +76,11 @@ func _ready() -> void:
 	halfWidthFont = font.get_string_size(stringValue).x/2
 	heightFont = font.get_height()
 	stringPosition = Vector2(halfScreenWidth - halfWidthFont, heightFont)
+	
+	playerTextHalfWidth = font.get_string_size(playerScoreText).x/2
+	playerScorePosition = Vector2(halfScreenWidth - (halfScreenWidth/2) - playerTextHalfWidth, heightFont + 50)
+	aiTextHalfWidth = font.get_string_size(aiScoreText).x/2
+	aiScorePosition = Vector2(halfScreenWidth + (halfScreenWidth/2) - aiTextHalfWidth, heightFont + 50)
 
 func _physics_process(delta: float) -> void:
 	
@@ -105,11 +121,15 @@ func _physics_process(delta: float) -> void:
 				currentGameState = GAME_STATE.SERVE
 				deltaKeyPress = RESET_DELTA_KEY
 				isPlayerServe = true
+				aiScore += 1
+				aiScoreText = str(aiScore)
 				
 			if ballPosition.x >= screenWidth:
 				currentGameState = GAME_STATE.SERVE
 				deltaKeyPress = RESET_DELTA_KEY
 				isPlayerServe = false
+				playerScore += 1
+				playerScoreText = str(playerScore)
 				
 			if ballPosition.y - ballRadius <= 0.0:
 				ballSpeed.y = -ballSpeed.y
@@ -173,6 +193,8 @@ func setStartingPosition():
 	draw_rect(playerRectangle, paddleColor)
 	draw_rect(aiRectangle, paddleColor)
 	draw_string(font, stringPosition, stringValue)
+	draw_string(font, playerScorePosition, playerScoreText)
+	draw_string(font, aiScorePosition, aiScoreText)
 
 func changeString(newStringValue):
 	stringValue = newStringValue
