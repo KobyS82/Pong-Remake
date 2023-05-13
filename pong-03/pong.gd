@@ -73,7 +73,6 @@ const MAX_SCORE = 3
 var isPlayerWin
 
 func _ready() -> void:
-	#print(get_tree().get_root().size)
 	font.font_data = robotoFile
 	font.fixed_size = fontSize
 	halfWidthFont = font.get_string_size(stringValue).x/2
@@ -86,7 +85,6 @@ func _ready() -> void:
 	aiScorePosition = Vector2(halfScreenWidth + (halfScreenWidth/2) - aiTextHalfWidth, heightFont + 50)
 
 func _physics_process(delta: float) -> void:
-	
 	deltaKeyPress += delta
 	
 	match currentGameState:
@@ -124,13 +122,13 @@ func _physics_process(delta: float) -> void:
 				ballSpeed = -startingSpeed
 				changeString("Ai Serve: Press spacebar so serve")
 			
-			if(Input.is_key_pressed(KEY_SPACE)and 
+			if(Input.is_key_pressed(KEY_SPACE) and 
 			deltaKeyPress > MAX_KEY_TIME):
 				currentGameState = GAME_STATE.PLAY
 				deltaKeyPress = RESET_DELTA_KEY
 		GAME_STATE.PLAY:
 			changeString("PLAY!!!")
-			if(Input.is_key_pressed(KEY_SPACE)and 
+			if(Input.is_key_pressed(KEY_SPACE) and 
 			deltaKeyPress > MAX_KEY_TIME):
 				currentGameState = GAME_STATE.SERVE
 				deltaKeyPress = RESET_DELTA_KEY
@@ -156,6 +154,7 @@ func _physics_process(delta: float) -> void:
 			if ballPosition.y + ballRadius >= screenHeight:
 				ballSpeed.y = -ballSpeed.y
 				
+			# sectioning off the paddle to give it some y speed based on where it hits the  paddle
 			if(ballPosition.x - ballRadius >= playerPosition.x and
 			ballPosition.x - ballRadius <= playerPosition.x + paddleSize.x):
 				var PaddleDivide = paddleSize.y/3
@@ -198,7 +197,8 @@ func _physics_process(delta: float) -> void:
 				playerPosition.y += playerSpeed * delta
 				playerPosition.y = clamp(playerPosition.y, 0.0, screenHeight - paddleSize.y)
 				playerRectangle = Rect2(playerPosition, paddleSize)
-				
+			
+			# ai paddle will chase the ball
 			if ballPosition.y > aiPosition.y + (paddleSize.y/2 + 10):
 				aiPosition.y += 250 * delta
 			if ballPosition.y < aiPosition.y + (paddleSize.y/2 - 10):
