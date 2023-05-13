@@ -56,6 +56,8 @@ var deltaKeyPress = RESET_DELTA_KEY
 var startingSpeed = Vector2(400.0,0.0)
 var ballSpeed = -startingSpeed
 
+var playerSpeed = 200.0
+
 func _ready() -> void:
 	#print(get_tree().get_root().size)
 	font.font_data = robotoFile
@@ -109,17 +111,57 @@ func _physics_process(delta: float) -> void:
 				deltaKeyPress = RESET_DELTA_KEY
 				isPlayerServe = false
 				
+			if ballPosition.y - ballRadius <= 0.0:
+				ballSpeed.y = -ballSpeed.y
+			if ballPosition.y + ballRadius >= screenHeight:
+				ballSpeed.y = -ballSpeed.y
+				
 			if(ballPosition.x - ballRadius >= playerPosition.x and
-			ballPosition.x - ballRadius <= playerPosition.x + paddleSize.x and 
-			ballPosition.y >= playerPosition.y and 
-			ballPosition.y <= playerPosition.y + paddleSize.y):
-				ballSpeed = -ballSpeed
+			ballPosition.x - ballRadius <= playerPosition.x + paddleSize.x):
+				var PaddleDivide = paddleSize.y/3
+				
+				if(ballPosition.y >= playerPosition.y and 
+				ballPosition.y < playerPosition.y + PaddleDivide):
+					var tempBall = Vector2(-ballSpeed.x, -400.0)
+					ballSpeed = tempBall
+				elif(ballPosition.y >= playerPosition.y and 
+				ballPosition.y < playerPosition.y + PaddleDivide*2):
+					var tempBall = Vector2(-ballSpeed.x, 0.0)
+					ballSpeed = tempBall
+				elif(ballPosition.y >= playerPosition.y and 
+				ballPosition.y < playerPosition.y + PaddleDivide*3):
+					var tempBall = Vector2(-ballSpeed.x, 400.0)
+					ballSpeed = tempBall
 			
 			if(ballPosition.x + ballRadius >= aiPosition.x and
-			ballPosition.x + ballRadius <= aiPosition.x + paddleSize.x and 
-			ballPosition.y >= aiPosition.y and 
-			ballPosition.y <= aiPosition.y + paddleSize.y):
-				ballSpeed = -ballSpeed
+			ballPosition.x + ballRadius <= aiPosition.x + paddleSize.x):
+				var PaddleDivide = paddleSize.y/3
+				
+				if(ballPosition.y >= aiPosition.y and 
+				ballPosition.y <= aiPosition.y + PaddleDivide):
+					var tempBall = Vector2(-ballSpeed.x, -400.0)
+					ballSpeed = tempBall
+				elif(ballPosition.y >= aiPosition.y and 
+				ballPosition.y <= aiPosition.y + PaddleDivide*2):
+					var tempBall = Vector2(-ballSpeed.x, 0.0)
+					ballSpeed = tempBall
+				elif(ballPosition.y >= aiPosition.y and 
+				ballPosition.y <= aiPosition.y + PaddleDivide*3):
+					var tempBall = Vector2(-ballSpeed.x, 400.0)
+					ballSpeed = tempBall
+			
+			if(Input.is_key_pressed(KEY_W)):
+				playerPosition.y += -playerSpeed * delta
+				playerPosition.y = clamp(playerPosition.y, 0.0, screenHeight - paddleSize.y)
+				playerRectangle = Rect2(playerPosition, paddleSize)
+			if(Input.is_key_pressed(KEY_S)):
+				playerPosition.y += playerSpeed * delta
+				playerPosition.y = clamp(playerPosition.y, 0.0, screenHeight - paddleSize.y)
+				playerRectangle = Rect2(playerPosition, paddleSize)
+				
+			aiPosition.y = ballPosition.y - paddleSize.y/2
+			aiPosition.y = clamp(aiPosition.y, 0.0, screenHeight - paddleSize.y)
+			aiRectangle = Rect2(aiPosition, paddleSize)
 				
 			queue_redraw()
 
