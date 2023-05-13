@@ -155,39 +155,11 @@ func _physics_process(delta: float) -> void:
 				ballSpeed.y = -ballSpeed.y
 				
 			# sectioning off the paddle to give it some y speed based on where it hits the  paddle
-			if(ballPosition.x - ballRadius >= playerPosition.x and
-			ballPosition.x - ballRadius <= playerPosition.x + paddleSize.x):
-				var PaddleDivide = paddleSize.y/3
-				
-				if(ballPosition.y >= playerPosition.y and 
-				ballPosition.y < playerPosition.y + PaddleDivide):
-					var tempBall = Vector2(-ballSpeed.x, -400.0)
-					ballSpeed = tempBall
-				elif(ballPosition.y >= playerPosition.y and 
-				ballPosition.y < playerPosition.y + PaddleDivide*2):
-					var tempBall = Vector2(-ballSpeed.x, 0.0)
-					ballSpeed = tempBall
-				elif(ballPosition.y >= playerPosition.y and 
-				ballPosition.y < playerPosition.y + PaddleDivide*3):
-					var tempBall = Vector2(-ballSpeed.x, 400.0)
-					ballSpeed = tempBall
+			if(Collisions.pointToRectangle(ballPosition, Rect2(playerPosition, paddleSize))):
+				ballSpeed = Vector2(-ballSpeed.x, randf_range(-400.0, 400.0))
 			
-			if(ballPosition.x + ballRadius >= aiPosition.x and
-			ballPosition.x + ballRadius <= aiPosition.x + paddleSize.x):
-				var PaddleDivide = paddleSize.y/3
-				
-				if(ballPosition.y >= aiPosition.y and 
-				ballPosition.y <= aiPosition.y + PaddleDivide):
-					var tempBall = Vector2(-ballSpeed.x, -400.0)
-					ballSpeed = tempBall
-				elif(ballPosition.y >= aiPosition.y and 
-				ballPosition.y <= aiPosition.y + PaddleDivide*2):
-					var tempBall = Vector2(-ballSpeed.x, 0.0)
-					ballSpeed = tempBall
-				elif(ballPosition.y >= aiPosition.y and 
-				ballPosition.y <= aiPosition.y + PaddleDivide*3):
-					var tempBall = Vector2(-ballSpeed.x, 400.0)
-					ballSpeed = tempBall
+			if(Collisions.pointToRectangle(ballPosition, Rect2(aiPosition, paddleSize))):
+				ballSpeed = Vector2(-ballSpeed.x, randf_range(-400.0, 400.0))
 			
 			if(Input.is_key_pressed(KEY_W)):
 				playerPosition.y += -playerSpeed * delta
