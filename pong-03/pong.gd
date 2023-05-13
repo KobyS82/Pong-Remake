@@ -30,7 +30,7 @@ var fontSize = 24
 # has to wait to set width/height till data and size gets set in _ready function
 var halfWidthFont
 var heightFont
-var stringValue = "Hello World!"
+var stringValue = "Start a game by pressing the spacebar"
 
 # ball variable
 @onready var startingBallPosition = Vector2(halfScreenWidth,halfScreenHeight)
@@ -69,6 +69,9 @@ var aiScoreText = str(aiScore)
 var aiTextHalfWidth
 var aiScorePosition
 
+const MAX_SCORE = 3
+var isPlayerWin
+
 func _ready() -> void:
 	#print(get_tree().get_root().size)
 	font.font_data = robotoFile
@@ -88,13 +91,30 @@ func _physics_process(delta: float) -> void:
 	
 	match currentGameState:
 		GAME_STATE.MENU:
-			changeString("MENU!!!!")
+			if(isPlayerWin == true):
+				changeString("Player wins! Press spacebar to start a new game")
+			elif(isPlayerWin == false):
+				changeString("Ai wins! Press spacebar to start a new game")
 			if(Input.is_key_pressed(KEY_SPACE) and 
 			deltaKeyPress > MAX_KEY_TIME):
 				currentGameState = GAME_STATE.SERVE
 				deltaKeyPress = RESET_DELTA_KEY
+				playerScoreText = str(playerScore)
+				aiScoreText = str(aiScore)
 		GAME_STATE.SERVE:
-			ballPosition = startingBallPosition
+			setStartingPosition()
+			queue_redraw()
+			
+			if(MAX_SCORE == playerScore):
+				currentGameState = GAME_STATE.MENU
+				playerScore = 0
+				aiScore = 0
+				isPlayerWin = true
+			if(MAX_SCORE == aiScore):
+				currentGameState = GAME_STATE.MENU
+				playerScore = 0
+				aiScore = 0
+				isPlayerWin = false
 			
 			if isPlayerServe:
 				ballSpeed = startingSpeed
@@ -186,15 +206,21 @@ func _physics_process(delta: float) -> void:
 			queue_redraw()
 
 func _draw() -> void:
-	setStartingPosition()
-
-func setStartingPosition():
 	draw_circle(ballPosition, ballRadius, ballColor)
 	draw_rect(playerRectangle, paddleColor)
 	draw_rect(aiRectangle, paddleColor)
 	draw_string(font, stringPosition, stringValue)
 	draw_string(font, playerScorePosition, playerScoreText)
 	draw_string(font, aiScorePosition, aiScoreText)
+
+func setStartingPosition():
+	aiPosition = Vector2(screenWidth - (paddlePadding + paddleSize.x), halfScreenHeight - halfPaddleHeight)
+	aiRectangle = Rect2(aiPosition, paddleSize)
+	
+	playerPosition = Vector2(paddlePadding, halfScreenHeight - halfPaddleHeight	)
+	playerRectangle = Rect2(playerPosition, paddleSize)
+	
+	ballPosition = startingBallPosition
 
 func changeString(newStringValue):
 	stringValue = newStringValue
