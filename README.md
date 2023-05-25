@@ -1,23 +1,15 @@
 # Pong-Remake
 A simple recreation of the classic game Pong inside of Godot (GDScript)
 
-## Table of contents
-
--[Installation](#Installation)
--[Usage](#Usage)
--[Credits](#Credits)
-
-
 ## Installation
 
-This page shows the coding repository: [https://REPLACE.githib.io/](https://github.com/KobyS82/Pong-Remake)
+This page shows the coding repository: [HERE](https://github.com/KobyS82/Pong-Remake)
 
 
 ## Usage
 
-This page can be viewed live at 
-
-![screenshot of content](.assets/images/test.png "This is a screenshot of the content") 
+To view this page you will need to copy down this repository and run it inside of Godot.
+You can download Godot with this link: [HERE](https://godotengine.org/download/windows/)
 
 
 ## Credits
