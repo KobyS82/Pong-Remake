@@ -1,6 +1,8 @@
 # Pong-Remake
 A simple recreation of the classic game Pong inside of Godot (GDScript)
 
+Click [HERE](https://the-kobes.itch.io/pong-recreation) to play on itch.io
+
 ## Installation
 
 This page shows the coding repository: [HERE](https://github.com/KobyS82/Pong-Remake)
@@ -10,7 +12,7 @@ This page shows the coding repository: [HERE](https://github.com/KobyS82/Pong-Re
 
 ## Usage
 
-To view this page you will need to copy down this repository and run it inside of Godot.
+To view this page locally,  you will need to copy down this repository and run it inside of Godot.
 
 You can download Godot with this link: [HERE](https://godotengine.org/download/windows/)
 
